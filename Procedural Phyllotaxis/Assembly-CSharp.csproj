@@ -50,8 +50,9 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
-     <Compile Include="Assets\Scripts\ObjectPhyllotaxis.cs" />
      <Compile Include="Assets\Scripts\TrailPhyllotaxis.cs" />
+     <Compile Include="Assets\Scripts\ObjectPhyllotaxis.cs" />
+     <Compile Include="Assets\Scripts\PhylloTunnel.cs" />
  <Reference Include="Unity.Timeline.Editor">
  <HintPath>D:/KOIONIC/November Party/Procedural Phyllotaxis/Procedural Phyllotaxis/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
  </Reference>

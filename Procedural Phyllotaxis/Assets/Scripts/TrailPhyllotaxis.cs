@@ -39,6 +39,13 @@ public class TrailPhyllotaxis : MonoBehaviour
     private void Awake()
     {
         _trailRenderer = GetComponent<TrailRenderer>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        ClearPhyllyotaxis();
+        
         number = numberStart;
         transform.localPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
 
@@ -46,12 +53,6 @@ public class TrailPhyllotaxis : MonoBehaviour
         {
             StartLerping();
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        ClearPhyllyotaxis();
     }
 
     // Update is called once per frame
@@ -110,7 +111,7 @@ public class TrailPhyllotaxis : MonoBehaviour
                 float percentageComplete = timeSinceStarted / intervalLerp;
                 transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
 
-                if (percentageComplete >= 0.97f)
+                if (percentageComplete >= 0.99f)
                 {
                     transform.localPosition = endPosition;
                     number += stepSize;
@@ -162,10 +163,12 @@ public class TrailPhyllotaxis : MonoBehaviour
 
         currentIteration = 0;
         
-        number = 0;
+        number = numberStart;
         
         _trailRenderer.Clear();
 
         transform.localPosition = Vector3.zero;
+        startPosition = Vector3.zero;
+        endPosition = Vector3.zero;
     }
 }
