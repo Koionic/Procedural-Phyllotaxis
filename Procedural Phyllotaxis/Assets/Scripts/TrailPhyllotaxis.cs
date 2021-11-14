@@ -5,20 +5,29 @@ using UnityEngine;
 
 public class TrailPhyllotaxis : MonoBehaviour
 {
-    [Range(0f, 360f)]
+    [Range(-180, 180f)]
     public float degreeDelta;
     public float scale;
 
+    public bool mirrored;
+    
     public int maxIteration;
     public int stepSize;
     private int currentIteration;
+    private int numberIncrement;
+    private int iterationIncrement = 1;
+
+    [Header("Time Based Values")] 
+    public float timeInterval;
+    private float timer;
     
     
+    [Header("Lerping")]
     public bool useLerp;
+    private float lerpTimer;
     public float intervalLerp;
     private bool isLerping;
     private Vector3 startPosition, endPosition;
-    private float timeStartedLerp;
     
     public int numberStart;
     private int number;
@@ -33,7 +42,7 @@ public class TrailPhyllotaxis : MonoBehaviour
     public float gradientLerpRate;
     
     private Vector2 phyllotaxisPosition;
-
+    
     private List<Vector3> positions = new List<Vector3>();
 
     private void Awake()
@@ -44,10 +53,9 @@ public class TrailPhyllotaxis : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ClearPhyllyotaxis();
-        
         number = numberStart;
-        transform.localPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
+        numberIncrement = stepSize;
+        transform.localPosition = (Vector3)CalculatePhyllotaxis(degreeDelta, scale, number);
 
         if (useLerp)
         {
@@ -71,12 +79,15 @@ public class TrailPhyllotaxis : MonoBehaviour
     void StartLerping()
     {
         isLerping = true;
-        timeStartedLerp = Time.time;
+        lerpTimer = 0;
+        number += numberIncrement;
         phyllotaxisPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
         startPosition = transform.localPosition;
+        
+        print("new position");
         endPosition = new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0f);
     }
-    
+
     /// <summary>
     /// Calculates the position of the dot using the phyllotaxis formula
     /// </summary>
@@ -90,6 +101,11 @@ public class TrailPhyllotaxis : MonoBehaviour
     {
         double angle = inCount * (inDegreeDelta * Mathf.Deg2Rad);
 
+        if (mirrored)
+        {
+            angle *= -1.0;
+        }
+        
         float r = inScale * Mathf.Sqrt(inCount);
 
         //Calculating the coordinate of the new position
@@ -107,41 +123,50 @@ public class TrailPhyllotaxis : MonoBehaviour
         {
             if (isLerping)
             {
-                float timeSinceStarted = Time.time - timeStartedLerp;
-                float percentageComplete = timeSinceStarted / intervalLerp;
+                lerpTimer += Time.deltaTime;
+                float percentageComplete = lerpTimer / intervalLerp;
                 transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
 
                 if (percentageComplete >= 0.99f)
                 {
                     transform.localPosition = endPosition;
-                    number += stepSize;
-                    currentIteration++;
+                    //number += iterationIncrement;
+                    currentIteration += iterationIncrement;
 
-                    if (currentIteration <= maxIteration)
+                    if ((currentIteration >= maxIteration && numberIncrement > 0) || (currentIteration <= numberStart && numberIncrement < 0))
                     {
-                        StartLerping();
+                        print("flipping iteration");
+                        numberIncrement *= -1;
+                        iterationIncrement *= -1;
                     }
-                    else
-                    {
-                        isLerping = false;
-                    }
+                    
+                    StartLerping();
                 }
             }
         }
         else
         {
-            //Calculates 2D position for new dot
-            phyllotaxisPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
+            if (timer >= timeInterval)
+            {
+                timer = 0;
 
-            // //Creates and stores 3D position for new dot
-            // positions.Add(new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0));
-            //
-            // transform.localPosition = positions[number];
+                //Calculates 2D position for new dot
+                phyllotaxisPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
 
-            transform.localPosition = new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0);
+                // //Creates and stores 3D position for new dot
+                // positions.Add(new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0));
+                //
+                // transform.localPosition = positions[number];
 
-            number+= stepSize;
-            currentIteration++;
+                transform.localPosition = new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0);
+
+                number += numberIncrement;
+                currentIteration += iterationIncrement;
+            }
+            else
+            {
+                timer += Time.deltaTime;
+            }
         }
     }
 

@@ -51,6 +51,7 @@
   </PropertyGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\TrailPhyllotaxis.cs" />
+     <Compile Include="Assets\Scripts\PhylloController.cs" />
      <Compile Include="Assets\Scripts\ObjectPhyllotaxis.cs" />
      <Compile Include="Assets\Scripts\PhylloTunnel.cs" />
  <Reference Include="Unity.Timeline.Editor">
