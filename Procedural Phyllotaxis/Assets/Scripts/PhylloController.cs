@@ -15,10 +15,18 @@ public class PhylloGroup
     public float minScale = 0.1f;
     public float maxScale = 4f;
     
+    void Awake()
+    {
+        
+    }
+    
     public void UpdateAngles(float newAngle)
     {
-        float angle = newAngle * angleMulti;
+        if (angleMulti == 0)
+            return;
         
+        float angle = newAngle * angleMulti;
+
         for (int i = 0; i < trails.Count; i++)
         {
             trails[i].degreeDelta += angle;
@@ -27,6 +35,9 @@ public class PhylloGroup
     
     public void UpdateScales(float newScale)
     {
+        if (scaleMulti == 0)
+            return;
+        
         float scale = newScale * scaleMulti;
         
         for (int i = 0; i < trails.Count; i++)
@@ -41,7 +52,20 @@ public class PhylloController : MonoBehaviour
     public float angleSpeed;
     public float scaleSpeed;
     
+    float deltaAngle = 0;
+    float deltaScale = 0;
+
+    private Vector2 desiredCameraPos;
+    
     public List<PhylloGroup> groups = new List<PhylloGroup>();
+
+    public GameObject camera;
+    
+    [Range(0f,1f)]
+    public float cameraSpeed;
+    
+    [Range(0f,1f)]
+    public float cameraRecoverSpeed;
     
     // Start is called before the first frame update
     void Start()
@@ -52,25 +76,7 @@ public class PhylloController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        float deltaAngle = 0;
-        float deltaScale = 0;
-        
-        if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            deltaAngle = -1f * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            deltaAngle = 1f * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.UpArrow))
-        {
-            deltaScale = 1f * Time.deltaTime;        
-        }
-        if (Input.GetKey(KeyCode.DownArrow))
-        {
-            deltaScale = -1f * Time.deltaTime;
-        }
+        UpdateCameraPosition();
         
         UpdatePhylloGroups(deltaAngle * angleSpeed, deltaScale * scaleSpeed);
     }
@@ -91,5 +97,24 @@ public class PhylloController : MonoBehaviour
                 groups[i].UpdateScales(scale);
             }
         }
+    }
+
+    public void UpdateScale(float input)
+    {
+        deltaScale = input;
+    }
+    public void UpdateAngle(float input)
+    {
+        deltaAngle = input;    
+    }
+
+    public void UpdatePosition(Vector2 newPos)
+    {
+        desiredCameraPos = newPos;
+    }
+
+    public void UpdateCameraPosition()
+    {
+        camera.transform.localPosition = Vector3.Lerp(camera.transform.localPosition, desiredCameraPos, cameraSpeed);
     }
 }

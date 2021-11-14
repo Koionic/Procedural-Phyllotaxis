@@ -48,6 +48,20 @@ public class TrailPhyllotaxis : MonoBehaviour
     private void Awake()
     {
         _trailRenderer = GetComponent<TrailRenderer>();
+
+        GradientColorKey[] colorKey = new GradientColorKey[2];
+        colorKey[0].color = currentColour;
+        colorKey[0].time = 0.0f;
+        colorKey[1].color = Color.black;
+        colorKey[1].time = 1.0f;
+        
+        GradientAlphaKey[] alphaKey = new GradientAlphaKey[2];
+        alphaKey[0].alpha = 1.0f;
+        alphaKey[0].time = 0.0f;
+        alphaKey[1].alpha = 0.0f;
+        alphaKey[1].time = 0.5f;
+
+        _trailRenderer.colorGradient.SetKeys(colorKey, alphaKey);
     }
 
     // Start is called before the first frame update
@@ -68,12 +82,12 @@ public class TrailPhyllotaxis : MonoBehaviour
     {
         CreateNewPhyllotaxisPoint();
         
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            ClearPhyllyotaxis();
-            
-            Awake();
-        }
+        // if (Input.GetKeyDown(KeyCode.C))
+        // {
+        //     ClearPhyllyotaxis();
+        //     
+        //     Awake();
+        // }
     }
 
     void StartLerping()
@@ -84,7 +98,6 @@ public class TrailPhyllotaxis : MonoBehaviour
         phyllotaxisPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
         startPosition = transform.localPosition;
         
-        print("new position");
         endPosition = new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0f);
     }
 
