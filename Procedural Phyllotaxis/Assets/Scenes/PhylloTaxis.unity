@@ -4402,6 +4402,10 @@ MonoBehaviour:
     - {fileID: 1368806459}
     minScale: 0.3
     maxScale: 4
+    allowTrailAmountChange: 0
+    currentAmount: 0
+    minAmount: 0
+    maxAmount: 0
   - name: Middle
     angleMulti: 0.3
     scaleMulti: 0.4
@@ -4410,6 +4414,10 @@ MonoBehaviour:
     - {fileID: 1114040582}
     minScale: 0.15
     maxScale: 3
+    allowTrailAmountChange: 0
+    currentAmount: 0
+    minAmount: 0
+    maxAmount: 0
   - name: Stars
     angleMulti: 0.2
     scaleMulti: 0.2
@@ -4420,7 +4428,12 @@ MonoBehaviour:
     - {fileID: 1964125694}
     minScale: 1
     maxScale: 4
+    allowTrailAmountChange: 0
+    currentAmount: 0
+    minAmount: 0
+    maxAmount: 0
   camera: {fileID: 963194225}
+  cameraRange: 3
   cameraSpeed: 0.311
   cameraRecoverSpeed: 0.125
 --- !u!114 &1562341679

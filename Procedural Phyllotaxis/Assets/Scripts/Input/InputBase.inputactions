@@ -84,6 +84,17 @@
                 },
                 {
                     "name": "",
+                    "id": "03e49cc7-b4ca-484b-b947-bdc9d0381eee",
+                    "path": "<HID::Logitech Logitech Extreme 3D>/hat",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "LeftStick XY Pos",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "8ef4c51b-b869-4e85-a1e1-54dfafe07d0a",
                     "path": "<Gamepad>/rightStick",
                     "interactions": "",
@@ -163,6 +174,39 @@
                     "name": "positive",
                     "id": "097ee949-c3e5-4f97-b9d0-2b15932c8490",
                     "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "Triggers",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "ThumbStick",
+                    "id": "dc85d39a-0921-43dc-98b4-49b9156d3333",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Triggers",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "c83d3467-1fc6-4140-bcfb-d4ebf2c5f822",
+                    "path": "<Joystick>/stick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "Triggers",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "f278484a-8c09-4a7a-a6e1-3538d60eef97",
+                    "path": "<Joystick>/stick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "PhylloControls",

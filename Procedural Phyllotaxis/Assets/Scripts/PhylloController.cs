@@ -14,6 +14,13 @@ public class PhylloGroup
 
     public float minScale = 0.1f;
     public float maxScale = 4f;
+
+    [Header("Trail Altering")]
+    public bool allowTrailAmountChange = false;
+    public int currentAmount;
+    public int minAmount;
+    public int maxAmount;
+    
     
     void Awake()
     {
@@ -45,6 +52,25 @@ public class PhylloGroup
             trails[i].scale = Mathf.Clamp(trails[i].scale + scale, minScale, maxScale);
         }    
     }
+
+    public void ChangeAmountOfTrails(int newAmount)
+    {
+        for (int i = 0; i < trails.Count; i++)
+        {
+            trails[i].enabled = false;
+        }
+
+        int newAngle = Mathf.RoundToInt(360 / newAmount);
+        
+        for (int i = 0; i < newAmount; i++)
+        {
+            trails[i].degreeDelta = newAngle;
+            trails[i].stepSize = 1;
+            trails[i].numberStart = i;
+            trails[i].ClearPhyllyotaxis(false);
+            trails[i].enabled = true;
+        }
+    }
 }
 
 public class PhylloController : MonoBehaviour
@@ -60,6 +86,8 @@ public class PhylloController : MonoBehaviour
     public List<PhylloGroup> groups = new List<PhylloGroup>();
 
     public GameObject camera;
+    
+    public float cameraRange;
     
     [Range(0f,1f)]
     public float cameraSpeed;
@@ -78,10 +106,10 @@ public class PhylloController : MonoBehaviour
     {
         UpdateCameraPosition();
         
-        UpdatePhylloGroups(deltaAngle * angleSpeed, deltaScale * scaleSpeed);
+        UpdatePhylloGroups(deltaAngle * angleSpeed, deltaScale * scaleSpeed, 0);
     }
 
-    void UpdatePhylloGroups(float angle, float scale)
+    void UpdatePhylloGroups(float angle, float scale, int newAmount)
     {
         bool updateAngle = Mathf.Abs(angle) > 0;
         bool updateScale = Mathf.Abs(scale) > 0;
@@ -95,6 +123,11 @@ public class PhylloController : MonoBehaviour
             if (updateScale)
             {
                 groups[i].UpdateScales(scale);
+            }
+
+            if (groups[i].allowTrailAmountChange && newAmount > 0)
+            {
+                groups[i].ChangeAmountOfTrails(newAmount);
             }
         }
     }
@@ -110,7 +143,7 @@ public class PhylloController : MonoBehaviour
 
     public void UpdatePosition(Vector2 newPos)
     {
-        desiredCameraPos = newPos;
+        desiredCameraPos = newPos * cameraRange;
     }
 
     public void UpdateCameraPosition()

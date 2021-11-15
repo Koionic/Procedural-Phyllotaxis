@@ -195,15 +195,18 @@ public class TrailPhyllotaxis : MonoBehaviour
         }
     }
 
-    private void ClearPhyllyotaxis()
+    public void ClearPhyllyotaxis(bool hardReset)
     {
         positions.Clear();
 
         currentIteration = 0;
         
         number = numberStart;
-        
-        _trailRenderer.Clear();
+
+        if (hardReset)
+        {
+            _trailRenderer.Clear();
+        }
 
         transform.localPosition = Vector3.zero;
         startPosition = Vector3.zero;
