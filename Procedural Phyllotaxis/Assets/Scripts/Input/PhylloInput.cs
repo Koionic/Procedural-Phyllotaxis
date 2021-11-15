@@ -7,6 +7,22 @@ using UnityEngine.InputSystem;
 public class PhylloInput : MonoBehaviour
 {
     public PhylloController controller;
+
+    public void GamepadDown(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            controller.UpdateNumberOfTrails(-1);
+        }
+    }
+
+    public void GamepadUp(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            controller.UpdateNumberOfTrails(1);
+        }
+    }
     
     public void GamepadLeftStick(InputAction.CallbackContext context)
     {
@@ -27,5 +43,13 @@ public class PhylloInput : MonoBehaviour
         float input = context.ReadValue<float>();
         
         controller.UpdateScale(input);
+    }
+
+    public void MainTrigger(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            controller.invertNextFrame = true;
+        }
     }
 }

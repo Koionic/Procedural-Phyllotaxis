@@ -11,7 +11,8 @@
                     "id": "f11ac0cf-0881-4555-ad40-8163f606ee8f",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "RightStick XY Pos",
@@ -19,7 +20,8 @@
                     "id": "dcfb96ee-401f-4171-b049-78b0dfd37a8d",
                     "expectedControlType": "Vector2",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Left Face Button",
@@ -27,7 +29,8 @@
                     "id": "f93c4a99-1c11-4ecd-a07f-139ed4784cd5",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Right Face Button",
@@ -35,7 +38,8 @@
                     "id": "21164d60-fa17-4517-8cb5-3228c3974705",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Top Face Button",
@@ -43,7 +47,8 @@
                     "id": "e21adca5-64a9-412d-a490-b99052bb477b",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Bottom Face Button",
@@ -51,7 +56,8 @@
                     "id": "46847deb-3c84-4c32-a31c-b961bb140109",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Triggers",
@@ -59,7 +65,8 @@
                     "id": "f974f8dd-c5e5-4eac-9a09-cf532bcf5da3",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Shoulders",
@@ -67,7 +74,26 @@
                     "id": "9680719c-4c88-4952-95f5-a468d4b5d57d",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": ""
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "JoystickTrigger",
+                    "type": "Button",
+                    "id": "fbd7bb4d-057f-4a30-9dae-fd8c9847c7b4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Joystick X",
+                    "type": "Button",
+                    "id": "946d018f-7413-4056-9619-773e4d88eca0",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -117,8 +143,30 @@
                 },
                 {
                     "name": "",
+                    "id": "7ac68a1e-255b-4a87-a0b6-516df5c8d97b",
+                    "path": "<HID::Logitech Logitech Extreme 3D>/button3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "Left Face Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d425bb4e-44e9-4704-8404-3b95ca749897",
                     "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "Right Face Button",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "40e7161a-552c-459a-b342-90cfd2989fc4",
+                    "path": "<HID::Logitech Logitech Extreme 3D>/button4",
                     "interactions": "",
                     "processors": "",
                     "groups": "PhylloControls",
@@ -182,7 +230,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "ThumbStick",
+                    "name": "Joystick Y",
                     "id": "dc85d39a-0921-43dc-98b4-49b9156d3333",
                     "path": "1DAxis",
                     "interactions": "",
@@ -244,6 +292,50 @@
                     "processors": "",
                     "groups": "PhylloControls",
                     "action": "Shoulders",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "f9ef64e9-302c-49e4-b3d2-393c6ee0eec3",
+                    "path": "<Joystick>/trigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "JoystickTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "Joystick X",
+                    "id": "5d69f8e5-80d6-4edc-90b9-8ae4881475d1",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick X",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "f50bfedc-531e-4379-81f7-ff487455bb2b",
+                    "path": "<Joystick>/stick/left",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "Joystick X",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "8d4e9cd0-6d49-48c3-b990-7b8def4bd337",
+                    "path": "<Joystick>/stick/right",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "PhylloControls",
+                    "action": "Joystick X",
                     "isComposite": false,
                     "isPartOfComposite": true
                 }

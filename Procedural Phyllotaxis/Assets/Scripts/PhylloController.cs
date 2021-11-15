@@ -10,8 +10,6 @@ public class PhylloGroup
     public float angleMulti = 1f;
     public float scaleMulti = 1f;
     
-    public List<TrailPhyllotaxis> trails = new List<TrailPhyllotaxis>();
-
     public float minScale = 0.1f;
     public float maxScale = 4f;
 
@@ -20,11 +18,32 @@ public class PhylloGroup
     public int currentAmount;
     public int minAmount;
     public int maxAmount;
-    
+
+    public bool allowTrailInvert;
+
+    public GameObject trailParent;
+
+    [Header("Colour Altering")] 
+    public Color newColor;
+    public Color previousColor;
+    public int currentColour;
+    public List<Color> colours = new List<Color>();
+
+    public List<TrailPhyllotaxis> trails = new List<TrailPhyllotaxis>();
     
     void Awake()
     {
         
+    }
+
+    public void UpdateColor()
+    {
+        
+    }
+
+    public void ChooseNewColour()
+    {
+        currentColour = (currentColour + 1) % colours.Count;
     }
     
     public void UpdateAngles(float newAngle)
@@ -40,7 +59,20 @@ public class PhylloGroup
         }    
     }
     
-    public void UpdateScales(float newScale)
+    public void UpdateParentScale(float scaleChange)
+    {
+        if (scaleMulti == 0 || !trailParent)
+            return;
+        
+        float deltaScale = scaleChange * scaleMulti;
+
+        float newScale = Mathf.Clamp(trailParent.transform.localScale.x + deltaScale, minScale, maxScale);
+
+        trailParent.transform.localScale = new Vector3(newScale, newScale, 1);
+
+    }
+    
+    public void UpdateIndividualScales(float newScale)
     {
         if (scaleMulti == 0)
             return;
@@ -53,22 +85,40 @@ public class PhylloGroup
         }    
     }
 
-    public void ChangeAmountOfTrails(int newAmount)
+    public void InvertTrails()
     {
         for (int i = 0; i < trails.Count; i++)
         {
-            trails[i].enabled = false;
+            trails[i].InvertPhyllotaxis();
         }
+    }
+    
+    public void ChangeAmountOfTrails(int amountChange)
+    {
+        int newAmount = Mathf.Clamp(currentAmount + amountChange, minAmount, maxAmount);
 
-        int newAngle = Mathf.RoundToInt(360 / newAmount);
+        if (newAmount != currentAmount)
+        {
+            currentAmount = newAmount;
+        }
         
-        for (int i = 0; i < newAmount; i++)
+        for (int i = trails.Count - 1; i >= currentAmount; i--)
+        {
+            trails[i].enabled = false;
+            trails[i]._trailRenderer.enabled = false;
+        }
+        
+        int newAngle = Mathf.RoundToInt(360 / currentAmount);
+        
+        for (int i = 0; i < currentAmount; i++)
         {
             trails[i].degreeDelta = newAngle;
-            trails[i].stepSize = 1;
             trails[i].numberStart = i;
-            trails[i].ClearPhyllyotaxis(false);
+            trails[i].intervalLerp = 1.5f - (currentAmount / 5f);
+            trails[i].ClearPhyllyotaxis(i > (currentAmount - amountChange));
             trails[i].enabled = true;
+            trails[i]._trailRenderer.enabled = true;
+            trails[i].StartLerping();
         }
     }
 }
@@ -80,9 +130,12 @@ public class PhylloController : MonoBehaviour
     
     float deltaAngle = 0;
     float deltaScale = 0;
+    int deltaAmount = 0;
 
-    private Vector2 desiredCameraPos;
+    public bool invertNextFrame;
     
+    private Vector2 desiredCameraPos;
+
     public List<PhylloGroup> groups = new List<PhylloGroup>();
 
     public GameObject camera;
@@ -106,7 +159,7 @@ public class PhylloController : MonoBehaviour
     {
         UpdateCameraPosition();
         
-        UpdatePhylloGroups(deltaAngle * angleSpeed, deltaScale * scaleSpeed, 0);
+        UpdatePhylloGroups(deltaAngle * angleSpeed, deltaScale * scaleSpeed, deltaAmount);
     }
 
     void UpdatePhylloGroups(float angle, float scale, int newAmount)
@@ -122,14 +175,23 @@ public class PhylloController : MonoBehaviour
             }
             if (updateScale)
             {
-                groups[i].UpdateScales(scale);
+                groups[i].UpdateParentScale(scale);
             }
 
-            if (groups[i].allowTrailAmountChange && newAmount > 0)
+            if (groups[i].allowTrailAmountChange && newAmount != 0)
             {
                 groups[i].ChangeAmountOfTrails(newAmount);
             }
+
+            if (invertNextFrame && groups[i].allowTrailInvert)
+            {
+                groups[i].InvertTrails();
+            }
         }
+        
+        deltaAmount = 0;
+        
+        invertNextFrame = false;
     }
 
     public void UpdateScale(float input)
@@ -146,8 +208,15 @@ public class PhylloController : MonoBehaviour
         desiredCameraPos = newPos * cameraRange;
     }
 
+    public void UpdateNumberOfTrails(int amountDelta)
+    {
+        deltaAmount = amountDelta;
+    }
+    
     public void UpdateCameraPosition()
     {
         camera.transform.localPosition = Vector3.Lerp(camera.transform.localPosition, desiredCameraPos, cameraSpeed);
     }
+    
+    
 }

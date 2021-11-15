@@ -32,7 +32,7 @@ public class TrailPhyllotaxis : MonoBehaviour
     public int numberStart;
     private int number;
 
-    private TrailRenderer _trailRenderer;
+    public TrailRenderer _trailRenderer;
     
     public int colourIndex;
     public Color currentColour;
@@ -67,7 +67,7 @@ public class TrailPhyllotaxis : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        number = numberStart;
+        number = numberStart + stepSize;
         numberIncrement = stepSize;
         transform.localPosition = (Vector3)CalculatePhyllotaxis(degreeDelta, scale, number);
 
@@ -90,7 +90,7 @@ public class TrailPhyllotaxis : MonoBehaviour
         // }
     }
 
-    void StartLerping()
+    public void StartLerping()
     {
         isLerping = true;
         lerpTimer = 0;
@@ -138,6 +138,16 @@ public class TrailPhyllotaxis : MonoBehaviour
             {
                 lerpTimer += Time.deltaTime;
                 float percentageComplete = lerpTimer / intervalLerp;
+                
+                if (float.IsNaN(startPosition.x) || float.IsNaN(startPosition.y))
+                    print("START POSITION IS NAN");
+                                
+                if (float.IsNaN(endPosition.x) || float.IsNaN(endPosition.y))
+                    print("END POSITION IS NAN");
+                
+                if (float.IsNaN(percentageComplete) || float.IsNaN(percentageComplete))
+                    print("PERCENTAGE IS NAN");
+                    
                 transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
 
                 if (percentageComplete >= 0.99f)
@@ -146,14 +156,14 @@ public class TrailPhyllotaxis : MonoBehaviour
                     //number += iterationIncrement;
                     currentIteration += iterationIncrement;
 
-                    if ((currentIteration >= maxIteration && numberIncrement > 0) || (currentIteration <= numberStart && numberIncrement < 0))
+                    if ((currentIteration >= maxIteration && numberIncrement > 0) || (currentIteration <= stepSize && numberIncrement < 0))
                     {
-                        print("flipping iteration");
-                        numberIncrement *= -1;
-                        iterationIncrement *= -1;
+                        InvertPhyllotaxis();
                     }
-                    
-                    StartLerping();
+                    else
+                    {
+                        StartLerping();
+                    }
                 }
             }
         }
@@ -183,6 +193,15 @@ public class TrailPhyllotaxis : MonoBehaviour
         }
     }
 
+    public void InvertPhyllotaxis()
+    {
+        print("flipping iteration");
+        numberIncrement *= -1;
+        iterationIncrement *= -1;
+        
+        StartLerping();
+    }
+    
     public void ColourPhyllotaxis(GameObject dot)
     {
         currentColour = Color.Lerp(currentColour, gradientColours[colourIndex], gradientLerpRate);
@@ -199,17 +218,25 @@ public class TrailPhyllotaxis : MonoBehaviour
     {
         positions.Clear();
 
-        currentIteration = 0;
+        currentIteration = stepSize;
+
+        iterationIncrement = 1;
+        numberIncrement = Mathf.Abs(numberIncrement);
         
-        number = numberStart;
+        number = numberStart + stepSize;
 
         if (hardReset)
         {
             _trailRenderer.Clear();
         }
 
-        transform.localPosition = Vector3.zero;
-        startPosition = Vector3.zero;
-        endPosition = Vector3.zero;
+        //transform.localPosition = Vector3.zero;
+        //startPosition = Vector3.zero;
+        //endPosition = Vector3.zero;
+
+        if (useLerp)
+        {
+            StartLerping();
+        }
     }
 }
