@@ -138,16 +138,7 @@ public class TrailPhyllotaxis : MonoBehaviour
             {
                 lerpTimer += Time.deltaTime;
                 float percentageComplete = lerpTimer / intervalLerp;
-                
-                if (float.IsNaN(startPosition.x) || float.IsNaN(startPosition.y))
-                    print("START POSITION IS NAN");
-                                
-                if (float.IsNaN(endPosition.x) || float.IsNaN(endPosition.y))
-                    print("END POSITION IS NAN");
-                
-                if (float.IsNaN(percentageComplete) || float.IsNaN(percentageComplete))
-                    print("PERCENTAGE IS NAN");
-                    
+
                 transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
 
                 if (percentageComplete >= 0.99f)
@@ -156,7 +147,7 @@ public class TrailPhyllotaxis : MonoBehaviour
                     //number += iterationIncrement;
                     currentIteration += iterationIncrement;
 
-                    if ((currentIteration >= maxIteration && numberIncrement > 0) || (currentIteration <= stepSize && numberIncrement < 0))
+                    if ((currentIteration == maxIteration && numberIncrement > 0) || (currentIteration == stepSize && numberIncrement < 0))
                     {
                         InvertPhyllotaxis();
                     }

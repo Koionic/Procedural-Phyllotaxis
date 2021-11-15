@@ -24,10 +24,15 @@ public class PhylloGroup
     public GameObject trailParent;
 
     [Header("Colour Altering")] 
-    public Color newColor;
+    public float colorTimer;
+
+    public float colorInterval;
+
+    public Color currentColor;
+    public Color nextColor;
     public Color previousColor;
-    public int currentColour;
-    public List<Color> colours = new List<Color>();
+    public int currentColorIndex;
+    public List<Color> colors = new List<Color>();
 
     public List<TrailPhyllotaxis> trails = new List<TrailPhyllotaxis>();
     
@@ -38,12 +43,39 @@ public class PhylloGroup
 
     public void UpdateColor()
     {
-        
+        if (colors.Count > 0)
+        {
+            colorTimer += Time.deltaTime;
+            float percentageComplete = colorTimer / colorInterval;
+
+            currentColor = Color.Lerp(previousColor, nextColor, percentageComplete);
+            
+            SetGradient(currentColor);
+
+            if (percentageComplete >= 0.99f)
+            {
+                ChooseNewColour();
+            }
+        }
+    }
+
+    public void SetGradient(Color newColour)
+    {
+        for (int i = 0; i < trails.Count; i++)
+        {
+            trails[i]._trailRenderer.startColor = newColour;
+        }
     }
 
     public void ChooseNewColour()
     {
-        currentColour = (currentColour + 1) % colours.Count;
+        previousColor = nextColor;
+        
+        currentColorIndex = (currentColorIndex + 1) % colors.Count;
+
+        nextColor = colors[currentColorIndex];
+
+        colorTimer = 0f;
     }
     
     public void UpdateAngles(float newAngle)
@@ -66,10 +98,9 @@ public class PhylloGroup
         
         float deltaScale = scaleChange * scaleMulti;
 
-        float newScale = Mathf.Clamp(trailParent.transform.localScale.x + deltaScale, minScale, maxScale);
+        float newScale = Mathf.Clamp(trailParent.transform.localScale.x + deltaScale, minScale * (maxAmount - currentAmount + 1), maxScale * (maxAmount - currentAmount + 1));
 
         trailParent.transform.localScale = new Vector3(newScale, newScale, 1);
-
     }
     
     public void UpdateIndividualScales(float newScale)
@@ -187,6 +218,8 @@ public class PhylloController : MonoBehaviour
             {
                 groups[i].InvertTrails();
             }
+            
+            groups[i].UpdateColor();
         }
         
         deltaAmount = 0;

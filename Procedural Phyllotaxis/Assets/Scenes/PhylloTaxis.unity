@@ -3380,6 +3380,11 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: fbd7bb4d-057f-4a30-9dae-fd8c9847c7b4
     m_ActionName: Player/JoystickTrigger[/Logitech Logitech Extreme 3D/trigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 946d018f-7413-4056-9619-773e4d88eca0
+    m_ActionName: Player/Joystick X[/Logitech Logitech Extreme 3D/stick/left,/Logitech
+      Logitech Extreme 3D/stick/right]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -4433,6 +4438,15 @@ MonoBehaviour:
     maxAmount: 7
     allowTrailInvert: 1
     trailParent: {fileID: 420896262}
+    colorTimer: 0
+    colorInterval: 5
+    currentColor: {r: 0, g: 0, b: 0, a: 0}
+    nextColor: {r: 0, g: 0, b: 0, a: 0}
+    previousColor: {r: 0, g: 0, b: 0, a: 0}
+    currentColorIndex: 0
+    colors:
+    - {r: 1, g: 0, b: 1, a: 1}
+    - {r: 0, g: 1, b: 1, a: 1}
     trails:
     - {fileID: 63068016}
     - {fileID: 360976230}
@@ -4452,6 +4466,15 @@ MonoBehaviour:
     maxAmount: 7
     allowTrailInvert: 1
     trailParent: {fileID: 1436559963}
+    colorTimer: 0
+    colorInterval: 5
+    currentColor: {r: 0, g: 0, b: 0, a: 0}
+    nextColor: {r: 0, g: 0, b: 0, a: 0}
+    previousColor: {r: 0, g: 0, b: 0, a: 0}
+    currentColorIndex: 0
+    colors:
+    - {r: 1, g: 0, b: 1, a: 1}
+    - {r: 0, g: 1, b: 1, a: 1}
     trails:
     - {fileID: 1793089058}
     - {fileID: 463930440}
@@ -4471,6 +4494,15 @@ MonoBehaviour:
     maxAmount: 7
     allowTrailInvert: 1
     trailParent: {fileID: 1799855086}
+    colorTimer: 0
+    colorInterval: 5
+    currentColor: {r: 0, g: 0, b: 0, a: 0}
+    nextColor: {r: 0, g: 0, b: 0, a: 0}
+    previousColor: {r: 0, g: 0, b: 0, a: 0}
+    currentColorIndex: 0
+    colors:
+    - {r: 0.69803923, g: 0, b: 1, a: 1}
+    - {r: 0, g: 0.6901961, b: 1, a: 1}
     trails:
     - {fileID: 327993536}
     - {fileID: 906499648}
@@ -4490,6 +4522,15 @@ MonoBehaviour:
     maxAmount: 7
     allowTrailInvert: 1
     trailParent: {fileID: 622742913}
+    colorTimer: 0
+    colorInterval: 5
+    currentColor: {r: 0, g: 0, b: 0, a: 0}
+    nextColor: {r: 0, g: 0, b: 0, a: 0}
+    previousColor: {r: 0, g: 0, b: 0, a: 0}
+    currentColorIndex: 0
+    colors:
+    - {r: 0.69803923, g: 0, b: 1, a: 1}
+    - {r: 0, g: 0.6901961, b: 1, a: 1}
     trails:
     - {fileID: 954681640}
     - {fileID: 965304063}
@@ -4509,12 +4550,19 @@ MonoBehaviour:
     maxAmount: 0
     allowTrailInvert: 0
     trailParent: {fileID: 0}
+    colorTimer: 0
+    colorInterval: 0
+    currentColor: {r: 0, g: 0, b: 0, a: 0}
+    nextColor: {r: 0, g: 0, b: 0, a: 0}
+    previousColor: {r: 0, g: 0, b: 0, a: 0}
+    currentColorIndex: 0
+    colors: []
     trails:
     - {fileID: 1577749885}
     - {fileID: 1114040582}
   - name: Stars
     angleMulti: 0.2
-    scaleMulti: 0.2
+    scaleMulti: 0
     minScale: 1
     maxScale: 4
     allowTrailAmountChange: 0
@@ -4523,6 +4571,13 @@ MonoBehaviour:
     maxAmount: 0
     allowTrailInvert: 0
     trailParent: {fileID: 307366449}
+    colorTimer: 0
+    colorInterval: 0
+    currentColor: {r: 0, g: 0, b: 0, a: 0}
+    nextColor: {r: 0, g: 0, b: 0, a: 0}
+    previousColor: {r: 0, g: 0, b: 0, a: 0}
+    currentColorIndex: 0
+    colors: []
     trails:
     - {fileID: 40919616}
     - {fileID: 1120148680}
