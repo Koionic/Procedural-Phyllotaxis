@@ -141,7 +141,7 @@ public class TrailPhyllotaxis : MonoBehaviour
 
                 transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
 
-                if (percentageComplete >= 0.99f)
+                if (percentageComplete >= 1f)
                 {
                     transform.localPosition = endPosition;
                     //number += iterationIncrement;
