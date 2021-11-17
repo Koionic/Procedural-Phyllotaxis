@@ -50,27 +50,27 @@ public class TrailPhyllotaxis : MonoBehaviour
 
     private void Awake()
     {
-        _trailRenderer = GetComponent<TrailRenderer>();
-
-        GradientColorKey[] colorKey = new GradientColorKey[2];
-        colorKey[0].color = currentColour;
-        colorKey[0].time = 0.0f;
-        colorKey[1].color = Color.black;
-        colorKey[1].time = 1.0f;
+         _trailRenderer = GetComponent<TrailRenderer>();
         
-        GradientAlphaKey[] alphaKey = new GradientAlphaKey[2];
-        alphaKey[0].alpha = 1.0f;
-        alphaKey[0].time = 0.0f;
-        alphaKey[1].alpha = 0.0f;
-        alphaKey[1].time = 0.5f;
-
-        _trailRenderer.colorGradient.SetKeys(colorKey, alphaKey);
+        // GradientColorKey[] colorKey = new GradientColorKey[2];
+        // colorKey[0].color = currentColour;
+        // colorKey[0].time = 0.0f;
+        // colorKey[1].color = Color.black;
+        // colorKey[1].time = 1.0f;
+        //
+        // GradientAlphaKey[] alphaKey = new GradientAlphaKey[2];
+        // alphaKey[0].alpha = 1.0f;
+        // alphaKey[0].time = 0.0f;
+        // alphaKey[1].alpha = 0.0f;
+        // alphaKey[1].time = 0.5f;
+        //
+        // _trailRenderer.colorGradient.SetKeys(colorKey, alphaKey);
     }
 
     // Start is called before the first frame update
     public void StartLogic()
     {
-        number = numberStart;
+        number = numberStart + stepSize;
         numberIncrement = stepSize;
         transform.localPosition = (Vector3)CalculatePhyllotaxis(degreeDelta, scale, number);
 
@@ -98,7 +98,8 @@ public class TrailPhyllotaxis : MonoBehaviour
         isLerping = true;
         lerpTimer = 0;
         number += numberIncrement;
-
+        currentIteration += iterationIncrement;
+        
         if (number < 0)
         {
             print("NUMBER LESS THAN ZERO");
@@ -159,16 +160,13 @@ public class TrailPhyllotaxis : MonoBehaviour
                 {
                     transform.localPosition = endPosition;
                     //number += iterationIncrement;
-                    currentIteration += iterationIncrement;
 
-                    if ((currentIteration >= maxIteration && iterationIncrement > 0) || (currentIteration <= 0 && iterationIncrement < 0))
+                    if (currentIteration == maxIteration || currentIteration == 0)
                     {
                         InvertPhyllotaxis();
                     }
-                    else
-                    {
-                        StartLerping();
-                    }
+
+                    StartLerping();
                 }
             }
         }
@@ -200,11 +198,8 @@ public class TrailPhyllotaxis : MonoBehaviour
 
     public void InvertPhyllotaxis()
     {
-        if (currentIteration != 0 && currentIteration != maxIteration)
-        {
-            numberIncrement *= -1;
-            iterationIncrement *= -1;
-        }
+        numberIncrement *= -1;
+        iterationIncrement *= -1;
     }
 
     public void ColourPhyllotaxis(GameObject dot)
@@ -228,7 +223,7 @@ public class TrailPhyllotaxis : MonoBehaviour
         iterationIncrement = 1;
         numberIncrement = Mathf.Abs(numberIncrement);
         
-        number = numberStart;
+        number = numberStart + stepSize;
 
         if (hardReset)
         {
