@@ -87,6 +87,9 @@ public class PhylloGroup
 
         for (int i = 0; i < trails.Count; i++)
         {
+            if (!trails[i].enabled)
+                continue;
+                
             trails[i].degreeDelta += angle;
         }    
     }
@@ -112,6 +115,9 @@ public class PhylloGroup
         
         for (int i = 0; i < trails.Count; i++)
         {
+            if (!trails[i].enabled)
+                continue;
+            
             trails[i].scale = Mathf.Clamp(trails[i].scale + scale, minScale, maxScale);
         }    
     }
@@ -120,7 +126,11 @@ public class PhylloGroup
     {
         for (int i = 0; i < trails.Count; i++)
         {
+            if (!trails[i].enabled)
+                continue;
+            
             trails[i].InvertPhyllotaxis();
+            trails[i].StartLerping();
         }
     }
     
@@ -128,10 +138,11 @@ public class PhylloGroup
     {
         int newAmount = Mathf.Clamp(currentAmount + amountChange, minAmount, maxAmount);
 
-        if (newAmount != currentAmount)
-        {
-            currentAmount = newAmount;
-        }
+        if (newAmount == currentAmount)
+            return;
+
+        currentAmount = newAmount;
+        
         
         for (int i = trails.Count - 1; i >= currentAmount; i--)
         {
@@ -146,10 +157,9 @@ public class PhylloGroup
             trails[i].degreeDelta = newAngle;
             trails[i].numberStart = i;
             trails[i].intervalLerp = 1.5f - (currentAmount / 5f);
-            trails[i].ClearPhyllyotaxis(i > (currentAmount - amountChange));
             trails[i].enabled = true;
             trails[i]._trailRenderer.enabled = true;
-            trails[i].StartLerping();
+            trails[i].ClearPhyllyotaxis(i >= ((currentAmount - amountChange)- 1));
         }
     }
 }
@@ -182,13 +192,19 @@ public class PhylloController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        for (int i = 0; i < groups.Count; i++)
+        {
+            for (int j = 0; j < groups[i].trails.Count; j++)
+            {
+                groups[i].trails[j].StartLogic();
+            }
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        UpdateCameraPosition();
+        LerpCameraPosition();
         
         UpdatePhylloGroups(deltaAngle * angleSpeed, deltaScale * scaleSpeed, deltaAmount);
     }
@@ -209,16 +225,15 @@ public class PhylloController : MonoBehaviour
                 groups[i].UpdateParentScale(scale);
             }
 
-            if (groups[i].allowTrailAmountChange && newAmount != 0)
-            {
-                groups[i].ChangeAmountOfTrails(newAmount);
-            }
-
             if (invertNextFrame && groups[i].allowTrailInvert)
             {
                 groups[i].InvertTrails();
             }
-            
+            else if (groups[i].allowTrailAmountChange && newAmount != 0)
+            {
+                groups[i].ChangeAmountOfTrails(newAmount);
+            }
+
             groups[i].UpdateColor();
         }
         
@@ -236,7 +251,7 @@ public class PhylloController : MonoBehaviour
         deltaAngle = input;    
     }
 
-    public void UpdatePosition(Vector2 newPos)
+    public void UpdateCameraPosition(Vector2 newPos)
     {
         desiredCameraPos = newPos * cameraRange;
     }
@@ -246,7 +261,7 @@ public class PhylloController : MonoBehaviour
         deltaAmount = amountDelta;
     }
     
-    public void UpdateCameraPosition()
+    public void LerpCameraPosition()
     {
         camera.transform.localPosition = Vector3.Lerp(camera.transform.localPosition, desiredCameraPos, cameraSpeed);
     }

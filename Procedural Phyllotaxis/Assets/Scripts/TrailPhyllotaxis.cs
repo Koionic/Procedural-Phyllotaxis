@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 public class TrailPhyllotaxis : MonoBehaviour
 {
@@ -65,9 +68,9 @@ public class TrailPhyllotaxis : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void StartLogic()
     {
-        number = numberStart + stepSize;
+        number = numberStart;
         numberIncrement = stepSize;
         transform.localPosition = (Vector3)CalculatePhyllotaxis(degreeDelta, scale, number);
 
@@ -95,8 +98,19 @@ public class TrailPhyllotaxis : MonoBehaviour
         isLerping = true;
         lerpTimer = 0;
         number += numberIncrement;
+
+        if (number < 0)
+        {
+            print("NUMBER LESS THAN ZERO");
+        }
+        
         phyllotaxisPosition = CalculatePhyllotaxis(degreeDelta, scale, number);
         startPosition = transform.localPosition;
+
+        if (float.IsNaN(phyllotaxisPosition.x) && float.IsNaN(phyllotaxisPosition.y))
+        {
+            print("position is NAN");
+        }
         
         endPosition = new Vector3(phyllotaxisPosition.x, phyllotaxisPosition.y, 0f);
     }
@@ -116,14 +130,14 @@ public class TrailPhyllotaxis : MonoBehaviour
 
         if (mirrored)
         {
-            angle *= -1.0;
+            angle *= -1;
         }
         
         float r = inScale * Mathf.Sqrt(inCount);
 
         //Calculating the coordinate of the new position
-        float x = r * (float) System.Math.Cos(angle);
-        float y = r * (float) System.Math.Sin(angle);
+        float x = r * (float) Math.Cos(angle);
+        float y = r * (float) Math.Sin(angle);
 
         Vector2 vec2 = new Vector2(x, y);
         
@@ -137,17 +151,17 @@ public class TrailPhyllotaxis : MonoBehaviour
             if (isLerping)
             {
                 lerpTimer += Time.deltaTime;
-                float percentageComplete = lerpTimer / intervalLerp;
+                float percentageComplete = Mathf.Clamp01(lerpTimer / intervalLerp);
 
                 transform.localPosition = Vector3.Lerp(startPosition, endPosition, percentageComplete);
 
-                if (percentageComplete >= 1f)
+                if (percentageComplete >= 0.99f)
                 {
                     transform.localPosition = endPosition;
                     //number += iterationIncrement;
                     currentIteration += iterationIncrement;
 
-                    if ((currentIteration == maxIteration && numberIncrement > 0) || (currentIteration == stepSize && numberIncrement < 0))
+                    if ((currentIteration >= maxIteration && iterationIncrement > 0) || (currentIteration <= 0 && iterationIncrement < 0))
                     {
                         InvertPhyllotaxis();
                     }
@@ -186,13 +200,13 @@ public class TrailPhyllotaxis : MonoBehaviour
 
     public void InvertPhyllotaxis()
     {
-        print("flipping iteration");
-        numberIncrement *= -1;
-        iterationIncrement *= -1;
-        
-        StartLerping();
+        if (currentIteration != 0 && currentIteration != maxIteration)
+        {
+            numberIncrement *= -1;
+            iterationIncrement *= -1;
+        }
     }
-    
+
     public void ColourPhyllotaxis(GameObject dot)
     {
         currentColour = Color.Lerp(currentColour, gradientColours[colourIndex], gradientLerpRate);
@@ -209,12 +223,12 @@ public class TrailPhyllotaxis : MonoBehaviour
     {
         positions.Clear();
 
-        currentIteration = stepSize;
+        currentIteration = 0;
 
         iterationIncrement = 1;
         numberIncrement = Mathf.Abs(numberIncrement);
         
-        number = numberStart + stepSize;
+        number = numberStart;
 
         if (hardReset)
         {

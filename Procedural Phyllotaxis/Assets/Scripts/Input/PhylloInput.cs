@@ -8,48 +8,86 @@ public class PhylloInput : MonoBehaviour
 {
     public PhylloController controller;
 
+    public UnityEvent playerInputExecuted;
+    
+    public void TrailDown()
+    {
+        controller.UpdateNumberOfTrails(-1);
+    }
+
+    public void TrailUp()
+    {
+        controller.UpdateNumberOfTrails(1);
+    }
+
+    public void CameraPosition(Vector2 input)
+    {
+        controller.UpdateCameraPosition(input);
+    }
+
+    public void TrailAngle(float input)
+    {
+        controller.UpdateAngle(input);
+    }
+    
+    public void TrailScale(float input)
+    {
+        controller.UpdateScale(input);
+    }
+
+    public void TrailInvert()
+    {
+        controller.invertNextFrame = true;
+    }
+    
     public void GamepadDown(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            controller.UpdateNumberOfTrails(-1);
+            TrailDown();
         }
+        
+        playerInputExecuted.Invoke();
     }
 
     public void GamepadUp(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            controller.UpdateNumberOfTrails(1);
+            TrailUp();
         }
+        
+        playerInputExecuted.Invoke();
     }
     
     public void GamepadLeftStick(InputAction.CallbackContext context)
     {
-        Vector2 input = context.ReadValue<Vector2>();
+        CameraPosition(context.ReadValue<Vector2>());
         
-        controller.UpdatePosition(input);
+        playerInputExecuted.Invoke();
     }
 
     public void GamepadShoulders(InputAction.CallbackContext context)
     {
-        float input = context.ReadValue<float>();
+        TrailAngle(context.ReadValue<float>());
         
-        controller.UpdateAngle(input);
+        playerInputExecuted.Invoke();
     }
     
     public void GamepadTriggers(InputAction.CallbackContext context)
     {
-        float input = context.ReadValue<float>();
-        
-        controller.UpdateScale(input);
+        TrailScale(context.ReadValue<float>());
+
+        playerInputExecuted.Invoke();
     }
 
     public void MainTrigger(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            controller.invertNextFrame = true;
+            TrailInvert();
         }
+        
+        playerInputExecuted.Invoke();
     }
 }
