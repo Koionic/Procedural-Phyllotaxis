@@ -119,7 +119,6 @@ public class AutoPhyllo : MonoBehaviour
         {
             autoInvertTimer = Random.Range(autoInvertMin, autoInvertMax);
             
-            print("auto invert");
             input.TrailInvert();
         }
     }
@@ -138,12 +137,10 @@ public class AutoPhyllo : MonoBehaviour
 
             if (Random.Range(0, 2) == 0)
             {
-                print("Trail up");
                 input.TrailUp();
             }
             else
             {
-                print("Trail down");
                 input.TrailDown();
             }
         }
